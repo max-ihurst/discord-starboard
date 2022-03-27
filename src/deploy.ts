@@ -4,7 +4,8 @@ import { Snowflake } from 'discord.js';
 import 'dotenv/config';
 
 import {
-	PingCommand
+	PingCommand,
+	StarboardCommand
 } from './interactions/index'
 
 const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN!);
@@ -16,7 +17,8 @@ try {
 		),
 		{
 			body: [
-				PingCommand
+				PingCommand,
+				StarboardCommand
 			]
 		}
 	);

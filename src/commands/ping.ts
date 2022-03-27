@@ -1,12 +1,12 @@
-import { BaseCommandInteraction } from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import Command from '../Command';
 
 export default class PingCommand extends Command {
 	public constructor() {
-		super('ping')
+		super('ping');
 	}
 
-	execute(interaction: BaseCommandInteraction<'raw'>): void {
+	execute(interaction: CommandInteraction): void {
 		interaction.reply(`🏓Latency is ${Date.now() - interaction.createdTimestamp}ms.`);
 	}
 }

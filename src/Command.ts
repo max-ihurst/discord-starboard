@@ -1,8 +1,8 @@
-import { BaseCommandInteraction } from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 
 interface Cmd {
 	name?: string;
-	execute(interaction: BaseCommandInteraction): void | Promise<void>;
+	execute(interaction: CommandInteraction): void | Promise<void>;
 }
 
 export default class Command implements Cmd {
@@ -12,7 +12,7 @@ export default class Command implements Cmd {
         this.name = tag;
     }
 
-    execute(interaction: BaseCommandInteraction<'raw'>): void {
+    execute(interaction: CommandInteraction): void {
         throw new Error('Method not implemented.');
     }
 }

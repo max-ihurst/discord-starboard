@@ -1,11 +1,11 @@
-import { Client, Intents, Collection, BaseCommandInteraction } from 'discord.js';
+import { Client, Intents, Collection } from 'discord.js';
 import Command from '../Command';
 import * as recursive from 'recursive-readdir';
 import * as path from 'path'
 import * as mongoose from 'mongoose';
 
 export default class client extends Client {
-    public commands: Collection<string, Command>
+    public commands: Collection<string, Command>;
 
     public constructor() {
         super({
@@ -17,8 +17,8 @@ export default class client extends Client {
         });
 
         this.once('ready', async () => {
-            await mongoose.connect(process.env.MONGO_URI!)
-            console.log('Yoo this is ready!')
+            await mongoose.connect(process.env.MONGO_URI!);
+            console.log('Yoo this is ready!');
         });
 
         this.on('interactionCreate', (interaction) => {
@@ -29,7 +29,7 @@ export default class client extends Client {
 
             if (cmd) {
                 try {
-                    cmd.execute(interaction as BaseCommandInteraction<'raw'>)
+                    cmd.execute(interaction);
                 } catch (e) {
                     interaction.reply('There was an error running this command!');
                     console.log(e);
@@ -46,7 +46,7 @@ export default class client extends Client {
         const files = await recursive('./src/commands');
         for (const file of files) {
             const cmd = ((await require(path.resolve(file))).default)
-            const command = new cmd()
+            const command = new cmd();
             command.client = this;
             this.commands.set(command.name, command);
         }
