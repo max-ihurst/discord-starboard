@@ -2,6 +2,7 @@ import { Client, Intents, Collection, BaseCommandInteraction } from 'discord.js'
 import Command from '../Command';
 import * as recursive from 'recursive-readdir';
 import * as path from 'path'
+import * as mongoose from 'mongoose';
 
 export default class client extends Client {
     public commands: Collection<string, Command>
@@ -15,7 +16,10 @@ export default class client extends Client {
             ]
         });
 
-        this.once('ready', () => console.log('Yoo this is ready!'));
+        this.once('ready', async () => {
+            await mongoose.connect(process.env.MONGO_URI!)
+            console.log('Yoo this is ready!')
+        });
 
         this.on('interactionCreate', (interaction) => {
             if (!interaction.isCommand()) return;
