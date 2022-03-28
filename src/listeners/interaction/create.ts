@@ -21,5 +21,5 @@ export default class InteractionCreateListener implements Listener {
                 console.log(e);
             }
         }
-	}
+    }
 }

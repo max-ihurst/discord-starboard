@@ -4,10 +4,12 @@ import { Guild } from '../types/types'
 export default model<Guild>('Guild', 
     new Schema<Guild>({
         guild: {
-            type: String
+            type: String,
+            required: true
         },
         board: {
-            type: String
+            type: String,
+            required: true
         }
     })
 )
