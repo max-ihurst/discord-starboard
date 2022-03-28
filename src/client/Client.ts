@@ -2,7 +2,12 @@ import { Client, Intents, Collection } from 'discord.js';
 import Command from '../Command';
 import * as recursive from 'recursive-readdir';
 import * as path from 'path'
-import * as mongoose from 'mongoose';
+
+declare module 'discord.js' {
+    interface Client {
+        commands: Collection<string, Command>
+    }
+}
 
 export default class client extends Client {
     public commands: Collection<string, Command>;
@@ -16,39 +21,32 @@ export default class client extends Client {
             ]
         });
 
-        this.once('ready', async () => {
-            await mongoose.connect(process.env.MONGO_URI!);
-            console.log('Yoo this is ready!');
-        });
-
-        this.on('interactionCreate', (interaction) => {
-            if (!interaction.isCommand()) return;
-        
-            const { commandName } = interaction;
-            const cmd = this.commands.get(commandName);
-
-            if (cmd) {
-                try {
-                    cmd.execute(interaction);
-                } catch (e) {
-                    interaction.reply('There was an error running this command!');
-                    console.log(e);
-                }
-            }
-        });
-
         this.commands = new Collection();
 
-        this.load();
+        this.loadCommands();
+        this.loadListeners();
     }
 
-    public async load(): Promise<void> {
+    public async loadCommands(): Promise<void> {
         const files = await recursive('./src/commands');
         for (const file of files) {
-            const cmd = ((await require(path.resolve(file))).default)
-            const command = new cmd();
-            command.client = this;
+            let command = (await require(path.resolve(file))).default
+            command = new command();
             this.commands.set(command.name, command);
+        }
+    }
+
+    public async loadListeners(): Promise<void> {
+        const files = await recursive('./src/listeners');
+        for (const file of files) {
+            let listener = (await require(path.resolve(file))).default
+            listener = new listener();
+
+            if (listener.once) {
+                this.once(listener.name, (...args) => listener.execute(...args));
+            } else {
+                this.on(listener.name, (...args) => listener.execute(...args));
+            }
         }
     }
 }

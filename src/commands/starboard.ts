@@ -2,10 +2,11 @@ import { CommandInteraction } from 'discord.js';
 import GuildModel from '../models/Guild';
 import Command from '../Command';
 
-export default class StarboardCommand extends Command {
-	public constructor() {
-		super('starboard');
-	}
+export default class StarboardCommand implements Command {
+    public name = 'starboard';
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public constructor() {}
 
 	public async execute(interaction: CommandInteraction): Promise<void> {
 		const channel = interaction.options.getChannel('channel');
