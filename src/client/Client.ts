@@ -14,6 +14,7 @@ declare module 'discord.js' {
 export default class client extends Client {
     public commandHandler: CommandHandler;
     public listenerHandler: ListenerHandler;
+    public stars: Collection<string, Star>;
 
     public constructor() {
         super({
@@ -33,6 +34,8 @@ export default class client extends Client {
 
         this.commandHandler = new CommandHandler(this);
         this.listenerHandler = new ListenerHandler(this);
+
+        this.stars = new Collection();
 
         this.load();
     }

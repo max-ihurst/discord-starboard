@@ -1,5 +1,6 @@
 import { Client } from 'discord.js';
 import Listener from '../Listener';
+import StarsModel from '../models/Star';
 import * as mongoose from 'mongoose';
 
 export default class ReadyListener implements Listener {
@@ -13,6 +14,12 @@ export default class ReadyListener implements Listener {
 
 	public async execute(): Promise<void> {
 		await mongoose.connect(process.env.MONGO_URI!);
+
+        const stars = await StarsModel.find();
+        for (const star of stars) {
+            this.client.stars.set(`${star.guild}:${star.channel}:${star.message}`, star);
+        }
+
         console.log('Yoo this is ready!');
-	}
+    }
 }
