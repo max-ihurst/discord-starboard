@@ -1,4 +1,4 @@
-import { Client, CommandInteraction } from 'discord.js';
+import { Client, CommandInteraction, Message } from 'discord.js';
 import Command from '../Command';
 
 export default class PingCommand implements Command {
@@ -9,7 +9,10 @@ export default class PingCommand implements Command {
 		this.client = client;
 	}
 
-	execute(interaction: CommandInteraction): void {
-		interaction.reply(`🏓Latency is ${Date.now() - interaction.createdTimestamp}ms.`);
+	public async execute(interaction: CommandInteraction): Promise<void> {
+		await interaction.deferReply({ ephemeral: true });
+		const msg = await interaction.fetchReply() as Message;
+		const latency = msg.createdTimestamp - interaction.createdTimestamp
+		interaction.editReply(`🏓Latency is ${latency}ms.`);
 	}
 }
