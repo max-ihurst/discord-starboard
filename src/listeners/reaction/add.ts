@@ -1,15 +1,17 @@
-import { MessageReaction } from 'discord.js';
-import Star from '../../models/Star';
+import { Client, MessageReaction } from 'discord.js';
+import StarModel from '../../models/Star';
 import * as Constants from '../../Constants';
 import Listener from '../../Listener';
 
 const { EMOJI } = Constants;
 
 export default class MessageReactionAddListener implements Listener {
+    public client: Client;
     public name = 'messageReactionAdd';
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	public constructor() {}
+	public constructor(client: Client) {
+        this.client = client;
+    }
 
 	public async execute(reaction: MessageReaction): Promise<void> {
         if (reaction.partial) {
@@ -24,7 +26,7 @@ export default class MessageReactionAddListener implements Listener {
         if (reaction.emoji.name != EMOJI) return;
         const { message } = reaction;
 
-        const doc = new Star({ 
+        const doc = new StarModel({ 
             guild: message.guild?.id, 
             channel: message.channel.id, 
             message: message.id 

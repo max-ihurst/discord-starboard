@@ -1,17 +1,19 @@
-import { CommandInteraction } from 'discord.js';
+import { Client, CommandInteraction } from 'discord.js';
 import Listener from '../../Listener';
 
 export default class InteractionCreateListener implements Listener {
+    public client: Client;
     public name = 'interactionCreate';
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	public constructor() {}
+	public constructor(client: Client) {
+        this.client = client;
+    }
 
 	public async execute(interaction: CommandInteraction): Promise<void> {
         if (!interaction.isCommand()) return;
         
         const { commandName } = interaction;
-        const cmd = interaction.client.commands.get(commandName);
+        const cmd = this.client.commandHandler.modules.get(commandName);
 
         if (cmd) {
             try {

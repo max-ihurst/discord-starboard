@@ -1,12 +1,14 @@
-import { CommandInteraction } from 'discord.js';
+import { Client, CommandInteraction } from 'discord.js';
 import GuildModel from '../models/Guild';
 import Command from '../Command';
 
 export default class StarboardCommand implements Command {
+    public client: Client;
     public name = 'starboard';
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	public constructor() {}
+	public constructor(client: Client) {
+        this.client = client;
+    }
 
 	public async execute(interaction: CommandInteraction): Promise<void> {
 		const channel = interaction.options.getChannel('channel');

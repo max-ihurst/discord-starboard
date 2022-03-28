@@ -1,16 +1,19 @@
 import { Client, Intents, Collection } from 'discord.js';
-import Command from '../Command';
-import * as recursive from 'recursive-readdir';
-import * as path from 'path'
+import CommandHandler from '../handlers/Command';
+import ListenerHandler from '../handlers/Listener';
+import { Star } from '../types/types';
 
 declare module 'discord.js' {
     interface Client {
-        commands: Collection<string, Command>
+        commandHandler: CommandHandler;
+        listenerHandler: ListenerHandler;
+        stars: Collection<string, Star>
     }
 }
 
 export default class client extends Client {
-    public commands: Collection<string, Command>;
+    public commandHandler: CommandHandler;
+    public listenerHandler: ListenerHandler;
 
     public constructor() {
         super({
@@ -28,32 +31,14 @@ export default class client extends Client {
             ]
         });
 
-        this.commands = new Collection();
+        this.commandHandler = new CommandHandler(this);
+        this.listenerHandler = new ListenerHandler(this);
 
-        this.loadCommands();
-        this.loadListeners();
+        this.load();
     }
 
-    public async loadCommands(): Promise<void> {
-        const files = await recursive('./src/commands');
-        for (const file of files) {
-            let command = (await require(path.resolve(file))).default
-            command = new command();
-            this.commands.set(command.name, command);
-        }
-    }
-
-    public async loadListeners(): Promise<void> {
-        const files = await recursive('./src/listeners');
-        for (const file of files) {
-            let listener = (await require(path.resolve(file))).default
-            listener = new listener();
-
-            if (listener.once) {
-                this.once(listener.name, (...args) => listener.execute(...args));
-            } else {
-                this.on(listener.name, (...args) => listener.execute(...args));
-            }
-        }
+    public load (): void {
+        this.commandHandler.load();
+        this.listenerHandler.load();
     }
 }
