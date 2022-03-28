@@ -25,13 +25,25 @@ export default class MessageReactionAddListener implements Listener {
 
         if (reaction.emoji.name != EMOJI) return;
         const { message } = reaction;
+        const star = this.client.stars.get(`${message.guild?.id}:${message.channel.id}:${message.id}`);
 
-        const doc = new StarModel({ 
-            guild: message.guild?.id, 
-            channel: message.channel.id, 
-            message: message.id 
-        });
+        if (!star) {
+            await new StarModel({ 
+                guild: message.guild?.id, 
+                channel: message.channel.id, 
+                message: message.id,
+                count: reaction.count
+            }).save();
+        } else {
+            star.count++;
 
-        await doc.save();
+            await StarModel.findOneAndUpdate({ 
+                guild: message.guild?.id, 
+                channel: message.channel.id, 
+                message: message.id
+            }, {
+                $set: star
+            });
+        }
     }
 }
