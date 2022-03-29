@@ -12,8 +12,10 @@ export default class InteractionCreateListener implements Listener {
 	public async execute(interaction: CommandInteraction): Promise<void> {
         if (!interaction.isCommand()) return;
         
-        const { commandName } = interaction;
-        const cmd = this.client.commandHandler.modules.get(commandName);
+        const name = interaction.commandName;
+        const subcommand = interaction.options.getSubcommand(false);
+        const cmd = this.client.commandHandler.modules.get(`${name}-${subcommand}`)
+            || this.client.commandHandler.modules.get(name);
 
         if (cmd) {
             try {

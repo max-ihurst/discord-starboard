@@ -1,6 +1,7 @@
 export interface Guild {
     guild: string;
     board: string;
+    limit: number;
 }
 
 export interface Star {
