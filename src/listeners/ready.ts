@@ -17,7 +17,7 @@ export default class ReadyListener implements Listener {
 
         const stars = await StarsModel.find();
         for (const star of stars) {
-            this.client.stars.set(`${star.guild}:${star.channel}:${star.message}`, star);
+            this.client.stars.set(star.message, star);
         }
 
         console.log('Yoo this is ready!');
