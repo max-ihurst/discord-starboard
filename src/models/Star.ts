@@ -11,6 +11,10 @@ export default model<Star>('Star',
             type: String,
             required: true
         },
+        primal: {
+            type: String,
+            required: true
+        },
         message: {
             type: String,
             required: true

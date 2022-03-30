@@ -7,6 +7,7 @@ export interface Guild {
 export interface Star {
     guild: string;
     channel: string;
+    primal: string;
     message: string;
     count: number;
 }
