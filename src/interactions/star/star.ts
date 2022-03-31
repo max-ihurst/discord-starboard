@@ -14,8 +14,19 @@ export const StarCommand = new SlashCommandBuilder()
                     .setRequired(true)
             )
         )
+    .addSubcommand(command =>
+        command
+            .setName('self')
+            .setDescription('Toggle whether to be able to star your own posts.')
+            .addBooleanOption(option =>
+                option
+                    .setName('toggle')
+                    .setDescription('Star your own posts.')
+                    .setRequired(true)
+            )
+        )
     .addSubcommand(command => 
         command
             .setName('leaderboard')
             .setDescription('The leaderboard of the guild stars.')
-    );
+        );

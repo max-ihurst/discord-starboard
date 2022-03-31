@@ -2,6 +2,7 @@ export interface Guild {
     guild: string;
     board: string;
     limit: number;
+    self: boolean;
 }
 
 export interface Star {

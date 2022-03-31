@@ -14,6 +14,10 @@ export default model<Guild>('Guild',
         limit: {
             type: Number,
             default: Constants.LIMIT
+        },
+        self: {
+            type: Boolean,
+            default: false
         }
     })
 )
