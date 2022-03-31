@@ -55,6 +55,7 @@ export default class MessageReactionAddListener implements Listener {
                     channel: message.channel.id,
                     primal: message.id,
                     message: msg.id,
+                    user: message.author?.id,
                     count: reaction.count
                 });
 

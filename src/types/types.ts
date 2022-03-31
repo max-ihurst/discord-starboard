@@ -9,5 +9,6 @@ export interface Star {
     channel: string;
     primal: string;
     message: string;
+    user: string;
     count: number;
 }

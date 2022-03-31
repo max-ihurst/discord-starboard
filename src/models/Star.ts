@@ -19,6 +19,10 @@ export default model<Star>('Star',
             type: String,
             required: true
         },
+        user: {
+            type: String,
+            required: true
+        },
         count: {
             type: Number,
             required: true
