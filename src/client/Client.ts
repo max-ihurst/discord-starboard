@@ -45,13 +45,6 @@ export default class client extends Client {
         this.settings = new SettingsManager(this);
 
         this.stars = new CacheManager(StarModel);
-        this.servers = new CacheManager(ServerModel)
-
-        this.load();
-    }
-
-    public load (): void {
-        this.commandHandler.load();
-        this.listenerHandler.load();
+        this.servers = new CacheManager(ServerModel);
     }
 }

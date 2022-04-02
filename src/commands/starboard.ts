@@ -11,7 +11,7 @@ export default class StarboardCommand implements Command {
         this.client = client;
     }
 
-	public async execute(interaction: CommandInteraction): Promise<void> {
+    public async execute(interaction: CommandInteraction): Promise<void> {
         const channel = interaction.options.getChannel('channel');
         await this.client.settings.set(interaction.guild!.id, 'board', channel?.id);
         interaction.reply({ content: `Sucessfully set starboard to ${channelMention(channel!.id)}.`, ephemeral: true });

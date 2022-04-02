@@ -10,6 +10,8 @@ export default class Listener {
     public constructor(client: Client) {
         this.modules = new Collection();
         this.client = client;
+
+        this.load();
     }
 
     public async load(): Promise<void> {

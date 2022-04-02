@@ -14,7 +14,7 @@ export default class MessageReactionAddListener implements Listener {
         this.client = client;
     }
 
-	public async execute(reaction: MessageReaction, user: User): Promise<void> {
+    public async execute(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.partial) {
             try {
                 await reaction.fetch();
@@ -43,15 +43,14 @@ export default class MessageReactionAddListener implements Listener {
         const channel = this.client.channels.cache.get(guild!.board) as TextChannel;
         if (!channel) return;
         
-        const generate = () => EMOJI + ' ' + count + ' ' + channelMention(channel.id);
-        const count = reaction.count;
+        const content = EMOJI + ' ' + reaction + channelMention(channel.id);
 
         if (!guild.self && message.author!.id == user.id) return;
-        if (!star && !guild.board || guild.limit > count) return;
+        if (!star && !guild.board || guild.limit > reaction.count) return;
 
         if (!star) {
             try {
-                const msg = await channel.send({ content: generate(), embeds: [embed] });
+                const msg = await channel.send({ content, embeds: [embed] });
 
                 const doc = new StarModel({ 
                     id: message.id,
@@ -59,7 +58,7 @@ export default class MessageReactionAddListener implements Listener {
                     channel: message.channel.id,
                     message: msg.id,
                     user: message.author?.id,
-                    count: count
+                    count: reaction.count
                 });
 
                 await doc.save();
@@ -81,7 +80,7 @@ export default class MessageReactionAddListener implements Listener {
             try {
                 if (!msg) return;
 
-                star.count = count;
+                star.count = reaction.count;
 
                 await StarModel.findOneAndUpdate({ 
                     id: message.id,
@@ -91,7 +90,7 @@ export default class MessageReactionAddListener implements Listener {
                     $set: star
                 });
 
-                await msg.edit({ content: generate(), embeds: [ embed ] });
+                await msg.edit({ content, embeds: [ embed ] });
             } catch (err) {
                 console.error(err);
             }

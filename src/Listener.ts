@@ -1,5 +1,5 @@
 export default interface Listener {
-	name: string;
+    name: string;
     once?: boolean;
-	execute(...args: any): void | Promise<void>;
+    execute(...args: any): void | Promise<void>;
 }

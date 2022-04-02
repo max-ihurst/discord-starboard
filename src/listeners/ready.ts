@@ -11,8 +11,8 @@ export default class ReadyListener implements Listener {
         this.client = client;
     }
 
-	public async execute(): Promise<void> {
-		await mongoose.connect(process.env.MONGO_URI!);
+    public async execute(): Promise<void> {
+        await mongoose.connect(process.env.MONGO_URI!);
         console.log('Yoo this is ready!');
     }
 }

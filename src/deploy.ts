@@ -4,28 +4,28 @@ import { Snowflake } from 'discord.js';
 import 'dotenv/config';
 
 import {
-	PingCommand,
-	StarboardCommand,
-	StarCommand
+    PingCommand,
+    StarboardCommand,
+    StarCommand
 } from './interactions/index';
 
 const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN!);
 
 try {
-	rest.put(
-		Routes.applicationCommands(
-			process.env.CLIENT_ID as Snowflake
-		),
-		{
-			body: [
-				PingCommand,
-				StarboardCommand,
-				StarCommand
-			]
-		}
-	);
+    rest.put(
+        Routes.applicationCommands(
+            process.env.CLIENT_ID as Snowflake
+        ),
+        {
+            body: [
+                PingCommand,
+                StarboardCommand,
+                StarCommand
+            ]
+        }
+    );
 
-	console.log('Successfully reloaded interaction (/) commands.');
+    console.log('Successfully reloaded interaction (/) commands.');
 } catch (e) {
-	console.log(e);
+    console.log(e);
 }

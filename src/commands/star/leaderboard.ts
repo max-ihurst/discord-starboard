@@ -9,14 +9,14 @@ interface User {
 }
 
 export default class StarLeaderboardCommand implements Command {
-	public client: Client;
-	public name = 'star-leaderboard';
+    public client: Client;
+    public name = 'star-leaderboard';
 
-	public constructor(client: Client) {
-		this.client = client;
-	}
+    public constructor(client: Client) {
+        this.client = client;
+    }
 
-	public async execute(interaction: CommandInteraction): Promise<void> {
+    public async execute(interaction: CommandInteraction): Promise<void> {
         const stars = this.client.stars.cache.filter(s => s.guild == interaction.guild?.id);
         const members = (await interaction.guild?.members.fetch())?.filter(m => !m.user.bot)
         let leaderboard: User[] = [];
