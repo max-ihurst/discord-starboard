@@ -3,12 +3,7 @@ import Lst from '../Listener';
 import * as recursive from 'recursive-readdir';
 import * as path from 'path';
 
-interface L {
-    modules: Collection<string, Lst>;
-    load(): Promise<void>;
-}
-
-export default class Listener implements L {
+export default class Listener {
     public modules: Collection<string, Lst>;
     public client: Client;
 

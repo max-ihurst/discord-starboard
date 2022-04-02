@@ -12,7 +12,7 @@ export default class PingCommand implements Command {
 	public async execute(interaction: CommandInteraction): Promise<void> {
 		await interaction.deferReply({ ephemeral: true });
 		const msg = await interaction.fetchReply() as Message;
-		const latency = msg.createdTimestamp - interaction.createdTimestamp
+		const latency = msg.createdTimestamp - interaction.createdTimestamp;
 		interaction.editReply(`🏓Latency is ${latency}ms.`);
 	}
 }

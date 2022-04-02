@@ -33,20 +33,19 @@ export default class StarLeaderboardCommand implements Command {
             leaderboard.push({ username: member.user.username, count });
         }
 
-        leaderboard = leaderboard.sort((a, b) => b.count - a.count).splice(0, 10);
         const postion = leaderboard.findIndex((u) => u.username == interaction.member?.user.username) + 1;
+        leaderboard = leaderboard.sort((a, b) => b.count - a.count).splice(0, 10).filter(s => s.count);
 
         interaction.reply({
             embeds: [ new MessageEmbed()
                 .setColor(0x2f3136)
                 .setTitle(bold(underscore('Leaderboard')))
                 .setDescription([
-                    leaderboard.map((u, i) => `${bold(`${i + 1}`)} ${u.username}  (${u.count})`).join('\n'),
+                    leaderboard.map((u, i) => `${bold(`${i + 1}.`)} ${u.username}  (${u.count})`).join('\n') + '\n',
                     postion > 0 ? 'You are - ' + bold(postion + ordinal.indicator(postion)) : null
                 ].join('\n'))
             ],
             ephemeral: true
         })
-
-	}
+    }
 }

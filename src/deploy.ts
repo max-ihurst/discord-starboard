@@ -13,9 +13,8 @@ const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN!);
 
 try {
 	rest.put(
-		Routes.applicationGuildCommands(
-			process.env.CLIENT_ID as Snowflake,
-			process.env.GUILD_ID as Snowflake
+		Routes.applicationCommands(
+			process.env.CLIENT_ID as Snowflake
 		),
 		{
 			body: [

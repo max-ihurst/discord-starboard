@@ -1,13 +1,13 @@
 import { Client } from 'discord.js';
-import Listener from '../Listener';
 import * as mongoose from 'mongoose';
+import Listener from '../Listener';
 
 export default class ReadyListener implements Listener {
     public client: Client;
     public name = 'ready';
     public once = true;
 
-	public constructor(client: Client) {
+    public constructor(client: Client) {
         this.client = client;
     }
 

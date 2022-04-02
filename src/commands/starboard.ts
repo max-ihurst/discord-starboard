@@ -6,7 +6,7 @@ export default class StarboardCommand implements Command {
     public client: Client;
     public name = 'starboard';
 
-	public constructor(client: Client) {
+    public constructor(client: Client) {
         this.client = client;
     }
 
@@ -14,5 +14,5 @@ export default class StarboardCommand implements Command {
         const channel = interaction.options.getChannel('channel');
         await this.client.settings.set(interaction.guild!.id, 'board', channel?.id);
         interaction.reply({ content: `Sucessfully set starboard to ${channelMention(channel!.id)}.`, ephemeral: true });
-	}
+    }
 }

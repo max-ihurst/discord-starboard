@@ -5,7 +5,7 @@ export default class InteractionCreateListener implements Listener {
     public client: Client;
     public name = 'interactionCreate';
 
-	public constructor(client: Client) {
+    public constructor(client: Client) {
         this.client = client;
     }
 

@@ -3,12 +3,7 @@ import Cmd from '../Command';
 import * as recursive from 'recursive-readdir';
 import * as path from 'path';
 
-interface C {
-    modules: Collection<string, Cmd>;
-    load(): Promise<void>;
-}
-
-export default class Command implements C {
+export default class Command {
     public modules: Collection<string, Cmd>;
     public client: Client;
 

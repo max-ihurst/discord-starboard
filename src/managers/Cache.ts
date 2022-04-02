@@ -1,16 +1,7 @@
 import { Collection } from 'discord.js';
 import * as mongoose from 'mongoose';
 
-interface S {
-    cache: Collection<string, any>;
-
-    set(key: string, value: any): void;
-    delete(id: string): void;
-    get(query: string): any;
-    init(): Promise<void>;
-}
-
-export default class CacheManager implements S {
+export default class CacheManager {
     public model: mongoose.Model<any>;
     public cache: Collection<string, any>;
 

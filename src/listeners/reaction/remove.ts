@@ -5,7 +5,7 @@ export default class MessageReactionRemoveListener implements Listener {
     public client: Client;
     public name = 'messageReactionRemove';
 
-	public constructor(client: Client) {
+    public constructor(client: Client) {
         this.client = client;
     }
 

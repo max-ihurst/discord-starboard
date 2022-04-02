@@ -38,7 +38,7 @@ export default class client extends Client {
                 'MESSAGE'
             ]
         });
-
+        
         this.commandHandler = new CommandHandler(this);
         this.listenerHandler = new ListenerHandler(this);
 

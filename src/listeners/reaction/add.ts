@@ -10,7 +10,7 @@ export default class MessageReactionAddListener implements Listener {
     public client: Client;
     public name = 'messageReactionAdd';
 
-	public constructor(client: Client) {
+    public constructor(client: Client) {
         this.client = client;
     }
 
@@ -35,20 +35,20 @@ export default class MessageReactionAddListener implements Listener {
             .setTimestamp();
 
         if (message.content) embed.setDescription(message.content);
-        if (message.attachments.first) embed.setImage(message.attachments.first()?.url as string);
+        if (message.attachments.first()) embed.setImage(message.attachments.first()?.url as string);
 
         const guild = this.client.servers.get(message.guild!.id);
         if (!guild) return;
-        const count = reaction.count;
-
-        if (!guild.self && message.author!.id == user.id) return;
-        if (!star && (!guild.board || guild.limit > count)) return;
 
         const channel = this.client.channels.cache.get(guild!.board) as TextChannel;
         if (!channel) return;
-
-        const generate = () => EMOJI + ' ' + count + ' ' + channelMention(channel.id);
         
+        const generate = () => EMOJI + ' ' + count + ' ' + channelMention(channel.id);
+        const count = reaction.count;
+
+        if (!guild.self && message.author!.id == user.id) return;
+        if (!star && !guild.board || guild.limit > count) return;
+
         if (!star) {
             try {
                 const msg = await channel.send({ content: generate(), embeds: [embed] });

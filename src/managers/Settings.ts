@@ -3,12 +3,7 @@ import { Settings } from '../types/types';
 import * as mongoose from 'mongoose';
 import ServerModel from '../models/Server';
 
-interface S {
-    client: Client;
-    set(id: string, key: string, value: any): Promise<void>;
-}
-
-export default class SettingsManager implements S {
+export default class SettingsManager {
     public client: Client;
 
     public constructor(client: Client) {
@@ -16,10 +11,10 @@ export default class SettingsManager implements S {
     }
 
     public async set(id: string, key: Settings, value: any): Promise<void> {
-        let doc = await ServerModel.findOne({ guild: id }) as mongoose.Document;
+        let doc = await ServerModel.findOne({ id: id }) as mongoose.Document;
         
         if (!doc) {
-            doc = new ServerModel({ guild: id });
+            doc = new ServerModel({ id: id });
         }
 
         doc.set(key, value);
