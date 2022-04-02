@@ -1,10 +1,11 @@
 import {channelMention} from '@discordjs/builders';
-import { Client, CommandInteraction } from 'discord.js';
+import { Client, CommandInteraction, Permissions } from 'discord.js';
 import Command from '../Command';
 
 export default class StarboardCommand implements Command {
     public client: Client;
     public name = 'starboard';
+    public permission = [Permissions.FLAGS.MANAGE_GUILD];
 
     public constructor(client: Client) {
         this.client = client;

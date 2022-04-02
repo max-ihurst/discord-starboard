@@ -1,4 +1,4 @@
-import { Client, CommandInteraction } from 'discord.js';
+import { Client, CommandInteraction, Permissions } from 'discord.js';
 import Listener from '../../Listener';
 
 export default class InteractionCreateListener implements Listener {
@@ -14,14 +14,23 @@ export default class InteractionCreateListener implements Listener {
         
         const name = interaction.commandName;
         const subcommand = interaction.options.getSubcommand(false);
-        const cmd = this.client.commandHandler.modules.get(`${name}-${subcommand}`)
-            || this.client.commandHandler.modules.get(name);
+        let cmd = this.client.commandHandler.modules.get(name + '-' + subcommand);
+
+        if (!cmd) {
+            cmd = this.client.commandHandler.modules.get(name);
+        }
 
         if (cmd) {
+            const permissions = interaction.member?.permissions as Permissions;
+            if (cmd.permission?.length && !permissions.has(cmd.permission)) {
+                interaction.reply({ content: 'You don\'t have permission to use ths command!', ephemeral: true });
+                return;
+            }
+
             try {
                 cmd.execute(interaction);
             } catch (e) {
-                interaction.reply('There was an error running this command!');
+                interaction.reply({ content: 'There was an error running this command!', ephemeral: true });
                 console.log(e);
             }
         }

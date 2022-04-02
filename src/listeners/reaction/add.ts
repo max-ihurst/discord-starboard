@@ -34,7 +34,7 @@ export default class MessageReactionAddListener implements Listener {
             .setColor('GOLD')
             .setTimestamp();
 
-        if (message.content) embed.setDescription(message.content);
+        if (message.content) embed.setDescription(message.content.substring(0, 1024));
         if (message.attachments.first()) embed.setImage(message.attachments.first()?.url as string);
 
         const guild = this.client.servers.get(message.guild!.id);

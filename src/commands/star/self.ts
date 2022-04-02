@@ -1,10 +1,11 @@
-import { Client, CommandInteraction } from 'discord.js';
+import { Client, CommandInteraction, Permissions } from 'discord.js';
 import { bold } from '@discordjs/builders';
 import Command from '../../Command';
 
 export default class StarSelfCommand implements Command {
 	public client: Client;
 	public name = 'star-self';
+	public permission = [Permissions.FLAGS.MANAGE_GUILD];
 
 	public constructor(client: Client) {
 		this.client = client;
