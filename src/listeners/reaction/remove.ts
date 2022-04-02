@@ -1,4 +1,4 @@
-import { Client, MessageReaction } from 'discord.js';
+import { Client, MessageReaction, User } from 'discord.js';
 import Listener from '../../Listener';
 
 export default class MessageReactionRemoveListener implements Listener {
@@ -9,8 +9,8 @@ export default class MessageReactionRemoveListener implements Listener {
         this.client = client;
     }
 
-	public async execute(reaction: MessageReaction): Promise<void> {
+	public async execute(reaction: MessageReaction, user: User): Promise<void> {
         const listener = this.client.listenerHandler.modules.get('messageReactionAdd');
-        listener?.execute(reaction);
+        listener?.execute(reaction, user);
     }
 }

@@ -1,4 +1,4 @@
-import { Client, MessageReaction, TextChannel, MessageEmbed, Message } from 'discord.js';
+import { Client, MessageReaction, TextChannel, MessageEmbed, Message, User } from 'discord.js';
 import { channelMention, hyperlink } from '@discordjs/builders';
 import StarModel from '../../models/Star';
 import * as Constants from '../../Constants';
@@ -14,7 +14,7 @@ export default class MessageReactionAddListener implements Listener {
         this.client = client;
     }
 
-	public async execute(reaction: MessageReaction): Promise<void> {
+	public async execute(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.partial) {
             try {
                 await reaction.fetch();
@@ -38,12 +38,16 @@ export default class MessageReactionAddListener implements Listener {
         if (message.attachments.first) embed.setImage(message.attachments.first()?.url as string);
 
         const guild = this.client.servers.get(message.guild!.id);
-        if (!star && (!guild?.board || guild!.limit > reaction.count)) return;
+        if (!guild) return;
+        const count = reaction.count;
+
+        if (!guild.self && message.author!.id == user.id) return;
+        if (!star && (!guild.board || guild.limit > count)) return;
 
         const channel = this.client.channels.cache.get(guild!.board) as TextChannel;
         if (!channel) return;
 
-        const generate = () => EMOJI + ' ' + reaction.count + ' ' + channelMention(channel.id);
+        const generate = () => EMOJI + ' ' + count + ' ' + channelMention(channel.id);
         
         if (!star) {
             try {
@@ -55,7 +59,7 @@ export default class MessageReactionAddListener implements Listener {
                     channel: message.channel.id,
                     message: msg.id,
                     user: message.author?.id,
-                    count: reaction.count
+                    count: count
                 });
 
                 await doc.save();
@@ -77,7 +81,7 @@ export default class MessageReactionAddListener implements Listener {
             try {
                 if (!msg) return;
 
-                star.count = reaction.count;
+                star.count = count;
 
                 await StarModel.findOneAndUpdate({ 
                     id: message.id,
