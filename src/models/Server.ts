@@ -1,10 +1,10 @@
 import { Schema, model } from 'mongoose'
-import { Guild } from '../types/types'
+import { Server } from '../types/types'
 import * as Constants from '../Constants';
 
-export default model<Guild>('Guild', 
-    new Schema<Guild>({
-        guild: {
+export default model<Server>('Guild', 
+    new Schema<Server>({
+        id: {
             type: String,
             required: true
         },

@@ -1,7 +1,6 @@
 import { Client, MessageReaction, TextChannel, MessageEmbed, Message } from 'discord.js';
-import { hyperlink, channelMention } from '@discordjs/builders';
+import { channelMention, hyperlink } from '@discordjs/builders';
 import StarModel from '../../models/Star';
-import GuildsModel from '../../models/Guild';
 import * as Constants from '../../Constants';
 import Listener from '../../Listener';
 
@@ -38,22 +37,22 @@ export default class MessageReactionAddListener implements Listener {
         if (message.content) embed.setDescription(message.content);
         if (message.attachments.first) embed.setImage(message.attachments.first()?.url as string);
 
-        const guild = await GuildsModel.findOne({ guild: message.guild?.id });
+        const guild = this.client.servers.get(message.guild!.id);
         if (!star && (!guild?.board || guild!.limit > reaction.count)) return;
 
         const channel = this.client.channels.cache.get(guild!.board) as TextChannel;
         if (!channel) return;
+
+        const generate = () => EMOJI + ' ' + reaction.count + ' ' + channelMention(channel.id);
         
         if (!star) {
             try {
-                const msg = await channel.send({ embeds: [embed],
-                    content: EMOJI + ' ' + reaction.count + ' ' + channelMention(channel.id)
-                });
+                const msg = await channel.send({ content: generate(), embeds: [embed] });
 
                 const doc = new StarModel({ 
+                    id: message.id,
                     guild: message.guild?.id, 
                     channel: message.channel.id,
-                    primal: message.id,
                     message: msg.id,
                     user: message.author?.id,
                     count: reaction.count
@@ -76,31 +75,19 @@ export default class MessageReactionAddListener implements Listener {
             }
 
             try {
-                if (!msg) {
-                    await StarModel.deleteOne({
-                        guild: message.guild?.id, 
-                        channel: message.channel.id, 
-                        primal: message.id
-                    });
-
-                    this.client.stars.delete(message.id);
-
-                    return;
-                }
+                if (!msg) return;
 
                 star.count = reaction.count;
 
                 await StarModel.findOneAndUpdate({ 
+                    id: message.id,
                     guild: message.guild?.id, 
-                    channel: message.channel.id, 
-                    primal: message.id
+                    channel: message.channel.id
                 }, {
                     $set: star
                 });
 
-                await msg.edit({ embeds: [ embed ],
-                    content: EMOJI + ' ' + star.count + ' ' + channelMention(channel.id)
-                });
+                await msg.edit({ content: generate(), embeds: [ embed ] });
             } catch (err) {
                 console.error(err);
             }

@@ -1,20 +1,27 @@
-import { Client, Intents, Collection } from 'discord.js';
+import { Client, Intents } from 'discord.js';
+import StarModel from '../models/Star';
+import ServerModel from '../models/Server';
+import SettingsManager from '../managers/Settings';
+import CacheManager from '../managers/Cache';
 import CommandHandler from '../handlers/Command';
 import ListenerHandler from '../handlers/Listener';
-import { Star } from '../types/types';
 
 declare module 'discord.js' {
     interface Client {
         commandHandler: CommandHandler;
         listenerHandler: ListenerHandler;
-        stars: Collection<string, Star>
+        settings: SettingsManager;
+        servers: CacheManager;
+        stars: CacheManager;
     }
 }
 
 export default class client extends Client {
     public commandHandler: CommandHandler;
     public listenerHandler: ListenerHandler;
-    public stars: Collection<string, Star>;
+    public settings: SettingsManager;
+    public servers: CacheManager;
+    public stars: CacheManager;
 
     public constructor() {
         super({
@@ -35,7 +42,10 @@ export default class client extends Client {
         this.commandHandler = new CommandHandler(this);
         this.listenerHandler = new ListenerHandler(this);
 
-        this.stars = new Collection();
+        this.settings = new SettingsManager(this);
+
+        this.stars = new CacheManager(StarModel);
+        this.servers = new CacheManager(ServerModel)
 
         this.load();
     }
