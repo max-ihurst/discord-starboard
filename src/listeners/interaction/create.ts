@@ -11,6 +11,7 @@ export default class InteractionCreateListener implements Listener {
 
     public async execute(interaction: CommandInteraction): Promise<void> {
         if (!interaction.isCommand()) return;
+	if (interaction.channel?.type == 'DM') return;
         
         const name = interaction.commandName;
         const subcommand = interaction.options.getSubcommand(false);
