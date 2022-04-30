@@ -22,9 +22,12 @@ export default class Listener {
             listener.client = this.client;
 
             if (listener.once) {
-                this.client.once(listener.name, listener.execute.bind(listener))
+                this.client.once(
+                    listener.name,
+                    listener.execute.bind(listener)
+                );
             } else {
-                this.client.on(listener.name, listener.execute.bind(listener))
+                this.client.on(listener.name, listener.execute.bind(listener));
             }
 
             this.modules.set(listener.name, listener);

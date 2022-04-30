@@ -1,31 +1,32 @@
-import { Schema, model } from 'mongoose'
-import { Star } from '../types/types'
+import { Schema, model } from 'mongoose';
+import { Star } from '../types/types';
 
-export default model<Star>('Star', 
+export default model<Star>(
+    'Star',
     new Schema<Star>({
         id: {
             type: String,
-            required: true
+            required: true,
         },
         guild: {
             type: String,
-            required: true
+            required: true,
         },
         channel: {
             type: String,
-            required: true
+            required: true,
         },
         message: {
             type: String,
-            required: true
+            required: true,
         },
         user: {
             type: String,
-            required: true
+            required: true,
         },
         count: {
             type: Number,
-            required: true
-        }
+            required: true,
+        },
     })
-)
+);

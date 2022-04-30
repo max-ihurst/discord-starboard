@@ -10,7 +10,8 @@ export default class MessageReactionRemoveListener implements Listener {
     }
 
     public async execute(reaction: MessageReaction, user: User): Promise<void> {
-        const listener = this.client.listenerHandler.modules.get('messageReactionAdd');
+        const listener =
+            this.client.listenerHandler.modules.get('messageReactionAdd');
         listener?.execute(reaction, user);
     }
 }

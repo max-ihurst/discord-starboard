@@ -1,4 +1,4 @@
-import {channelMention} from '@discordjs/builders';
+import { channelMention } from '@discordjs/builders';
 import { Client, CommandInteraction, Permissions } from 'discord.js';
 import Command from '../Command';
 
@@ -13,7 +13,17 @@ export default class StarboardCommand implements Command {
 
     public async execute(interaction: CommandInteraction): Promise<void> {
         const channel = interaction.options.getChannel('channel');
-        await this.client.settings.set(interaction.guild!.id, 'board', channel?.id);
-        interaction.reply({ content: `Sucessfully set starboard to ${channelMention(channel!.id)}.`, ephemeral: true });
+        await this.client.settings.set(
+            interaction.guild!.id,
+            'board',
+            channel?.id
+        );
+
+        interaction.reply({
+            content: `Sucessfully set starboard to ${channelMention(
+                channel!.id
+            )}.`,
+            ephemeral: true,
+        });
     }
 }

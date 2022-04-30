@@ -19,7 +19,7 @@ export default class Command {
         for (const file of files) {
             let command = (await require(path.resolve(file))).default;
             command = new command(this.client);
-            
+
             this.modules.set(command.name, command);
         }
     }

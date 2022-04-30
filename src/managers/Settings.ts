@@ -11,8 +11,8 @@ export default class SettingsManager {
     }
 
     public async set(id: string, key: Settings, value: any): Promise<void> {
-        let doc = await ServerModel.findOne({ id: id }) as mongoose.Document;
-        
+        let doc = (await ServerModel.findOne({ id: id })) as mongoose.Document;
+
         if (!doc) {
             doc = new ServerModel({ id: id });
         }

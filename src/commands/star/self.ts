@@ -14,6 +14,10 @@ export default class StarSelfCommand implements Command {
     public async execute(interaction: CommandInteraction): Promise<void> {
         const toggle = interaction.options.getBoolean('toggle') as boolean;
         await this.client.settings.set(interaction.guild!.id, 'self', toggle);
-        interaction.reply({ content: `Sucessfully set self star to ${bold(toggle.toString())}.`, ephemeral: true });
+
+        interaction.reply({
+            content: `Sucessfully set self star to ${bold(toggle.toString())}.`,
+            ephemeral: true,
+        });
     }
 }
