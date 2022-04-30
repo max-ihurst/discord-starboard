@@ -38,13 +38,13 @@ export default class MessageReactionAddListener implements Listener {
             this.client.stars.cache.find((s) => s.message == message.id);
 
         const embed = new MessageEmbed()
+            .addField('Source', hyperlink('Jump!', message.url))
+            .setColor('GOLD')
+            .setTimestamp()
             .setAuthor({
                 name: message.author!.tag,
                 iconURL: message.author!.displayAvatarURL(),
-            })
-            .addField('Source', hyperlink('Jump!', message.url))
-            .setColor('GOLD')
-            .setTimestamp();
+            });
 
         if (message.content)
             embed.setDescription(message.content.substring(0, 1024));
@@ -52,16 +52,11 @@ export default class MessageReactionAddListener implements Listener {
             embed.setImage(message.attachments.first()?.url as string);
 
         const guild = this.client.servers.get(message.guild!.id);
-        if (!guild) return;
-
         const channel = this.client.channels.cache.get(
             guild!.board
         ) as TextChannel;
-        if (!channel) return;
 
-        const content =
-            EMOJI + ' ' + reaction.count + ' ' + channelMention(channel.id);
-
+        if (!channel || !guild) return;
         if (!guild.self && message.author!.id == user.id) return;
         if (guild.limit > reaction.count) return;
 
@@ -92,7 +87,10 @@ export default class MessageReactionAddListener implements Listener {
                         }
                     );
 
-                    await msg.edit({ content, embeds: message.embeds });
+                    await msg.edit({
+                        content: `${EMOJI} ${reaction.count} <#${channel.id}>`,
+                        embeds: message.embeds,
+                    });
                 } catch (error) {
                     console.error(error);
                 }
@@ -107,14 +105,20 @@ export default class MessageReactionAddListener implements Listener {
                         }
                     );
 
-                    await msg.edit({ content, embeds: [embed] });
+                    await msg.edit({
+                        content: `${EMOJI} ${reaction.count} <#${channel.id}>`,
+                        embeds: [embed],
+                    });
                 } catch (err) {
                     console.error(err);
                 }
             }
         } else {
             try {
-                const msg = await channel.send({ content, embeds: [embed] });
+                const msg = await channel.send({
+                    content: `${EMOJI} ${reaction.count} <#${channel.id}>`,
+                    embeds: [embed],
+                });
 
                 const doc = new StarModel({
                     id: message.id,
